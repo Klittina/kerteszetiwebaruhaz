@@ -1,0 +1,69 @@
+nav {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+
+ul {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  gap: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  font-size: 25px;
+}
+
+mat-sidenav-container {
+  height: 100%;
+}
+
+mat-toolbar {
+  background-color: #2e7d32; /* sötétzöld */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+mat-sidenav {
+  border-radius: 0;
+}
+
+.menu-toggle-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle-button {
+      display: block;
+  }
+
+  nav ul {
+      display: none;
+  }
+  #webshop a{
+    font-size: 80%;
+  }
+}
+
+@media (max-width: 350px) {
+  #webshop a{
+    font-size: 50%;
+    text-align: center;
+  }
+}
+@media (max-width: 260px) {
+  #webshop a{
+    font-size: 30%;
+    text-align: center;
+  }
+}

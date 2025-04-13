@@ -1,0 +1,93 @@
+/* Profilkártya */
+.profile-card {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2{
+  text-align: center;
+}
+
+hr{
+  width: 80%;
+  height: 2px;
+  background-color: black;
+  border-radius: 40%;
+}
+
+.profile-card mat-card-header {
+  background-color: #f1f8e9;
+  color: #388e3c;
+  border-radius: 8px;
+}
+
+.profile-card mat-card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.profile-card mat-card-subtitle {
+  font-size: 1rem;
+  color: #607d8b;
+  margin-top: 5px;
+}
+
+.profile-card mat-card-content p {
+  font-size: 1rem;
+  color: #616161;
+}
+
+.profile-card mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card button {
+  width: 100%;
+  max-width: 200px;
+}
+
+.edit-profile-card {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile-card mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.edit-actions button {
+  width: 48%;
+}
+
+mat-flat-button {
+  text-transform: none;
+}
+
+mat-flat-button[color="primary"] {
+  background-color: #388e3c;
+  color: white;
+}
+
+mat-flat-button[color="primary"]:hover {
+  background-color: #2e7d32;
+}
+
+mat-form-field input {
+  font-size: 1rem;
+}

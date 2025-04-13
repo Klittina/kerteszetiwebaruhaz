@@ -1,0 +1,106 @@
+.order-card {
+  width: 70%;
+  margin: 15px auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+mat-card-header {
+  background-color: #f1f8e9;
+  color: #388e3c;
+  padding: 10px;
+}
+
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #607d8b;
+}
+
+mat-card-content {
+  padding: 15px;
+}
+
+.order-items {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 300px;
+}
+
+.order-table th,
+.order-table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.order-table th {
+  background-color: #388e3c;
+  color: white;
+}
+
+.order-table tr:last-child td {
+  border-bottom: none;
+}
+
+.order-details-button {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  background-color: #388e3c;
+  color: white;
+  text-transform: none;
+  text-align: center;
+}
+
+.order-details-button:hover {
+  background-color: #2e7d32;
+}
+
+@media (max-width: 768px) {
+  .order-card {
+    width: 90%;
+  }
+
+  mat-card-title {
+    font-size: 1rem;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .order-table th,
+  .order-table td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-card {
+    width: 95%;
+  }
+
+  .order-details-button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .order-table {
+    font-size: 0.8rem;
+  }
+}

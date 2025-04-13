@@ -1,0 +1,46 @@
+<mat-card class="profile-card">
+  <mat-card-header>
+    <div mat-card-avatar class="profile-avatar"></div>
+    <mat-card-title>{{ user.name.firstname }} {{ user.name.lastname }}</mat-card-title>
+    <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p><strong>Regisztráció ideje:</strong> {{ user.createdAt | date:'yyyy-MM-dd' }}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-flat-button color="primary" (click)="editMode = !editMode">
+      {{ editMode ? 'Mégse' : 'Adatok szerkesztése' }}
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="editMode" class="edit-profile-card">
+  <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+    <mat-form-field appearance="outline">
+      <mat-label>Keresztnév</mat-label>
+      <input matInput formControlName="firstname">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vezetéknév</mat-label>
+      <input matInput formControlName="lastname">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <div class="edit-actions">
+      <button mat-flat-button color="primary" type="submit">Mentés</button>
+      <button mat-flat-button type="button" (click)="editMode = false">Mégse</button>
+    </div>
+  </form>
+</mat-card>
+
+<h2>Korábbi rendeléseid</h2>
+<hr>
+<app-order-history [orders]="orders"></app-order-history>
+

@@ -1,0 +1,23 @@
+<mat-card class="product-card">
+  <mat-card-header>
+    <mat-card-title>{{ product.name }}</mat-card-title>
+    <mat-card-subtitle>{{ product.category }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <img
+  mat-card-image
+  [src]="'/img/' + product.imageUrl"
+  alt="{{ product.name }}"
+  class="product-image"
+/>
+
+
+
+  <mat-card-content>
+    <div class="price">{{ product.price | priceFormat }}</div>
+    <div class="stock">Raktáron: {{ product.stock }} db</div>
+    <button mat-raised-button color="primary" class="add-to-cart-button">
+      Kosárba
+    </button>
+  </mat-card-content>
+</mat-card>

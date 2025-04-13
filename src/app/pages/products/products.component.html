@@ -1,0 +1,11 @@
+<mat-card class="product-card">
+  <mat-card-header class="centered-header">
+    <mat-card-title>Kínálatunk</mat-card-title>
+  </mat-card-header>
+  <hr>
+  <mat-card-content>
+    <div class="product-list">
+      <app-product-item *ngFor="let product of products" [product]="product"></app-product-item>
+    </div>
+  </mat-card-content>
+</mat-card>
