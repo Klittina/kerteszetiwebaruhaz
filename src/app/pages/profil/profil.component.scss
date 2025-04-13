@@ -1,6 +1,5 @@
-/* Profilkártya */
 .profile-card {
-  max-width: 500px;
+  width: 70%;
   margin: 20px auto;
   padding: 15px;
   border-radius: 8px;
@@ -52,7 +51,7 @@ hr{
 }
 
 .edit-profile-card {
-  max-width: 600px;
+  width: 70%;
   margin: 20px auto;
   padding: 15px;
   border-radius: 8px;
@@ -75,19 +74,23 @@ hr{
   width: 48%;
 }
 
-mat-flat-button {
+.mat-flat-button {
   text-transform: none;
 }
 
-mat-flat-button[color="primary"] {
+.mat-flat-button[color="primary"] {
+  background-color: #388e3c;
+  color: white;
+}
+.zod{
   background-color: #388e3c;
   color: white;
 }
 
-mat-flat-button[color="primary"]:hover {
+.mat-flat-button[color="primary"]:hover {
   background-color: #2e7d32;
 }
 
-mat-form-field input {
+.mat-form-field input {
   font-size: 1rem;
 }

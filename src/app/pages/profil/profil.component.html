@@ -1,6 +1,7 @@
 <mat-card class="profile-card">
+  <h2>Profilom</h2>
+<hr>
   <mat-card-header>
-    <div mat-card-avatar class="profile-avatar"></div>
     <mat-card-title>{{ user.name.firstname }} {{ user.name.lastname }}</mat-card-title>
     <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
   </mat-card-header>
@@ -10,7 +11,7 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-flat-button color="primary" (click)="editMode = !editMode">
+    <button mat-flat-button color="primary" class="zod" (click)="editMode = !editMode">
       {{ editMode ? 'Mégse' : 'Adatok szerkesztése' }}
     </button>
   </mat-card-actions>
@@ -34,13 +35,13 @@
     </mat-form-field>
 
     <div class="edit-actions">
-      <button mat-flat-button color="primary" type="submit">Mentés</button>
-      <button mat-flat-button type="button" (click)="editMode = false">Mégse</button>
+      <button mat-flat-button color="primary" type="submit"  class="zod">Mentés</button>
+      <button mat-flat-button type="button" (click)="editMode = false" class="zod">Mégse</button>
     </div>
   </form>
 </mat-card>
 
-<h2>Korábbi rendeléseid</h2>
+<h2>Korábbi rendelések</h2>
 <hr>
 <app-order-history [orders]="orders"></app-order-history>
 
