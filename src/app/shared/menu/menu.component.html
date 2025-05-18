@@ -13,6 +13,18 @@
       <span matListItemTitle>Profilom</span>
     </a>
   }
+  @if (isLoggedIn) {
+    <a mat-list-item routerLink="/cart" routerLinkActive="active-list-item" (click)="closeMenu()">
+      <mat-icon matListItemIcon>person</mat-icon>
+      <span matListItemTitle>Kosár</span>
+    </a>
+  }
+  @if (isLoggedIn) {
+    <a mat-list-item routerLink="/admin" routerLinkActive="active-list-item" (click)="closeMenu()">
+      <mat-icon matListItemIcon>person</mat-icon>
+      <span matListItemTitle>Admin</span>
+    </a>
+  }
   @if (!isLoggedIn) {
     <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
       <mat-icon matListItemIcon>login</mat-icon>

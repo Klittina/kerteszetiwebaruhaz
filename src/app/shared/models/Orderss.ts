@@ -1,12 +1,14 @@
 export interface OrderItem {
-  product: string;
+  productId: string;
+  productName: string;
   quantity: number;
   unitPrice: number;
 }
 
 export interface Order {
-  id: number;
-  date: string;
+  id?: string;
+  userEmail: string;
+  createdAt: Date;
   total: number;
   items: OrderItem[];
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -39,18 +40,29 @@ export class FakeLoadingService {
     });
   }
 
-  loadingWithPromise3(email: string, password: string): Promise<boolean> {
+  loadingWithPromise3(email: string, password: string): Promise<User> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (email === 'test@gmail.com' && password === 'testpw') {
-          resolve(true);
+          const user: User = {
+  id: 1,
+  email: email,
+  role: 'a',
+  name: {
+    firstname: 'Teszt',
+    lastname: 'Felhasználó'
+  },
+  password: ''
+};
 
+          resolve(user);
         } else {
-          reject(false);
+          reject(new Error('Invalid credentials'));
         }
       }, 3000);
-    })
+    });
   }
+
 
   loadingWithObservable(email: string, password: string): Observable<number> {
     return new Observable((subscriber: Subscriber<number>) => {

@@ -20,6 +20,12 @@ export const routes: Routes = [
   {
     path:'products',
     loadComponent:() =>import('./pages/products/products.component').then(m => m.ProductsComponent)
+  },{
+    path:'admin',
+    loadComponent:() =>import('./pages/admin/admin.component').then(m => m.AdminComponent)
+  },{
+    path:'cart',
+    loadComponent:() =>import('./pages/cart/cart.component').then(m => m.CartComponent)
   },
   {
     path: '',

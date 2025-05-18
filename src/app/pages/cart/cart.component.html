@@ -1,0 +1,44 @@
+
+<div class="cart-container">
+ <h2>Kosár tartalma</h2>
+
+<table *ngIf="cartItems.length > 0; else emptyCart" class="cart-table">
+  <thead>
+    <tr>
+      <th>Termék neve</th>
+      <th>Ár</th>
+      <th>Mennyiség</th>
+      <th>Részösszeg</th>
+      <th>Műveletek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cartItems">
+      <td>{{ item.name }}</td>
+      <td>{{ item.price | priceFormat }}</td>
+      <td>
+        <button mat-icon-button (click)="decreaseQuantity(item)">
+          <mat-icon>remove</mat-icon>
+        </button>
+        {{ item.quantity }}
+        <button mat-icon-button (click)="increaseQuantity(item)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </td>
+      <td>{{ (item.price * item.quantity) | priceFormat }}</td>
+      <td>
+        <button mat-icon-button color="warn" (click)="removeItem(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table *ngIf="cartItems.length > 0; else emptyCart" class="cart-table"> ... </table>
+  <ng-template #emptyCart><p>A kosarad üres.</p></ng-template>
+  <h3>Végösszeg: {{ getTotal() | priceFormat }}</h3>
+  <div class="cart-actions" *ngIf="cartItems.length > 0">
+    <button mat-raised-button color="warn" (click)="clearCart()">Kosár ürítése</button>
+    <button mat-raised-button color="primary" (click)="placeOrder()">Megvétel</button>
+  </div>
+</div>

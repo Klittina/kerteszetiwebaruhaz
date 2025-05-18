@@ -1,47 +1,45 @@
-<mat-card class="profile-card">
+<mat-card class="profile-card" *ngIf="profileForm && !loading && !editMode">
   <h2>Profilom</h2>
-<hr>
+  <hr />
+
   <mat-card-header>
-    <mat-card-title>{{ user.name.firstname }} {{ user.name.lastname }}</mat-card-title>
-    <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+    <mat-card-title>
+      {{ profileForm.get('firstname')?.value }} {{ profileForm.get('lastname')?.value }}
+    </mat-card-title>
+    <mat-card-subtitle>{{ profileForm.get('email')?.value }}</mat-card-subtitle>
   </mat-card-header>
 
-  <mat-card-content>
-    <p><strong>Regisztráció ideje:</strong> {{ user.createdAt | date:'yyyy-MM-dd' }}</p>
-  </mat-card-content>
-
   <mat-card-actions>
-    <button mat-flat-button color="primary" class="zod" (click)="editMode = !editMode">
-      {{ editMode ? 'Mégse' : 'Adatok szerkesztése' }}
-    </button>
+    <button mat-flat-button color="primary" (click)="editMode = true">Adatok szerkesztése</button>
   </mat-card-actions>
 </mat-card>
 
-<mat-card *ngIf="editMode" class="edit-profile-card">
+<mat-card class="edit-profile-card" *ngIf="editMode && profileForm">
   <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
     <mat-form-field appearance="outline">
       <mat-label>Keresztnév</mat-label>
-      <input matInput formControlName="firstname">
+      <input matInput formControlName="firstname" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Vezetéknév</mat-label>
-      <input matInput formControlName="lastname">
+      <input matInput formControlName="lastname" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email">
+      <input matInput formControlName="email" />
     </mat-form-field>
 
     <div class="edit-actions">
-      <button mat-flat-button color="primary" type="submit"  class="zod">Mentés</button>
-      <button mat-flat-button type="button" (click)="editMode = false" class="zod">Mégse</button>
+      <button mat-flat-button color="primary" type="submit">Mentés</button>
+      <button mat-flat-button type="button" (click)="editMode = false">Mégse</button>
     </div>
   </form>
 </mat-card>
 
-<h2>Korábbi rendelések</h2>
-<hr>
-<app-order-history [orders]="orders"></app-order-history>
+<mat-spinner *ngIf="loading" diameter="50"></mat-spinner>
 
+<h2 *ngIf="!loading">Korábbi rendelések</h2>
+<hr />
+<!-- <app-order-history [orders]="orders"></app-order-history> -->

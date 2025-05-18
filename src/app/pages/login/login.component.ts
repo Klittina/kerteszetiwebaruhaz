@@ -9,6 +9,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FakeLoadingService } from '../../shared/services/fake-loading.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../shared/services/user.service'; // új import
+import { take } from 'rxjs';
+import { User } from '../../shared/models/User';
+import { signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth'; // importálni kell
 
 @Component({
   selector: 'app-login',
@@ -35,33 +40,41 @@ export class LoginComponent implements OnDestroy{
   showLoginForm: boolean = true;
   loadingSubscription?: Subscription;
 
-  constructor(private loadingService: FakeLoadingService, private router: Router) { }
+  constructor(
+  private auth: Auth, // Hozzá kell adni
+  private router: Router,
+  private loadingService: FakeLoadingService,
+  private userService: UserService
+) {}
 
-  login() {
-    this.loginError = '';
+async login() {
+  const emailValue = this.email.value?.trim() || '';
+  const passwordValue = this.password.value?.trim() || '';
+  this.loginError = '';
+  this.isLoading = true;
+  this.showLoginForm = false;
 
-    if (this.email.value === 'janos@kert.hu' && this.password.value === 'testpw') {
-      this.isLoading = true;
-      this.showLoginForm = false;
+  try {
+    // ⬇️ Firebase bejelentkezés
+    const result = await signInWithEmailAndPassword(this.auth, emailValue, passwordValue);
 
-      localStorage.setItem('isLoggedIn', 'true');
+    // ⬇️ User betöltése és szerepkör lekérdezése Firestore-ból vagy máshonnan
+    const user = result.user;
 
-      this.loadingService.loadingWithPromise().then((data: number) => {
-        if (data === 3) {
-          window.location.href = '/home';
-        }
-      }).catch(error => {
-        console.error(error);
-        this.isLoading = false;
-        this.showLoginForm = true;
-        this.loginError = 'Loading error occurred!';
-      }).finally(() => {
-        console.log("This executed finally!")
-      });
-    } else {
-      this.loginError = 'Invalid email or password!';
-    }
+    console.log("Sikeres Firebase login:", user.email);
+
+    localStorage.setItem('userEmail', user.email || '');  // <-- EZ KELL
+
+    // Most már AppComponent is érzékeli majd!
+    this.router.navigateByUrl('/home');
+
+  } catch (error) {
+    console.error(error);
+    this.loginError = 'Hibás email vagy jelszó!';
+    this.isLoading = false;
+    this.showLoginForm = true;
   }
+}
 
   login2() {
     const emailValue = this.email.value || '';
@@ -89,20 +102,35 @@ export class LoginComponent implements OnDestroy{
   }
 
   async login3() {
-    const emailValue = this.email.value || '';
-    const passwordValue = this.password.value || '';
-    try {
-      const bool = await this.loadingService.loadingWithPromise3(emailValue, passwordValue);
-      console.log(bool, "This executed second!");
-      this.isLoading = true;
-      this.showLoginForm = false;
+  const emailValue = this.email.value || '';
+  const passwordValue = this.password.value || '';
+
+  try {
+    const user: User = await this.loadingService.loadingWithPromise3(emailValue, passwordValue);
+
+    this.isLoading = true;
+    this.showLoginForm = false;
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('role', user.role);
+    localStorage.setItem('userEmail', user.email);
+    localStorage.setItem('isLoggedIn', 'true');
+
+    if (user.role === 'a') {
+      this.router.navigateByUrl('/admin');
+    } else {
       this.router.navigateByUrl('/home');
-      localStorage.setItem('isLoggedIn', 'true');
-    } catch (error) {
-      console.error(error)
     }
-    console.log("This executed finally!");
+
+  } catch (error) {
+    console.error(error);
+    this.loginError = 'Bejelentkezési hiba!';
+    this.isLoading = false;
+    this.showLoginForm = true;
   }
+
+  console.log("This executed finally!");
+}
+
 
   login4() {
     const emailValue = this.email.value || '';

@@ -1,11 +1,39 @@
+<mat-card class="filter-card">
+  <form [formGroup]="filterForm" class="filter-form" (ngSubmit)="loadProducts()">
+    <mat-form-field appearance="fill">
+      <mat-label>Kategória</mat-label>
+      <mat-select formControlName="category">
+        <mat-option value="">Összes</mat-option>
+        <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Minimum ár (Ft)</mat-label>
+      <input matInput type="number" formControlName="minPrice" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Maximum ár (Ft)</mat-label>
+      <input matInput type="number" formControlName="maxPrice" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit">Szűrés</button>
+  </form>
+</mat-card>
+
 <mat-card class="product-card">
   <mat-card-header class="centered-header">
     <mat-card-title>Kínálatunk</mat-card-title>
   </mat-card-header>
-  <hr>
+  <hr />
   <mat-card-content>
     <div class="product-list">
-      <app-product-item *ngFor="let product of products" [product]="product"></app-product-item>
+      <app-product-item
+        *ngFor="let product of products"
+        [product]="product"
+        (addToCart)="handleAddToCart($event)">
+      </app-product-item>
     </div>
   </mat-card-content>
 </mat-card>
