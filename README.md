@@ -13,3 +13,8 @@ ng serve
 Admin login:
 Email: admin@admin.com
 Password: adminpw
+
+
+
+
+https://egycserepes.web.app/home
