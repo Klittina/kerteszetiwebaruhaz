@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Figyeljük az autentikáció állapotát
     onAuthStateChanged(this.auth, async (user) => {
       if (user && user.email) {
         this.isLoggedIn = true;

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { User } from '../../shared/models/User';
 import { Product } from '../../shared/models/Products';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth , createUserWithEmailAndPassword,UserCredential, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -55,6 +55,7 @@ export class AdminComponent {
     private fb: FormBuilder,
     private firestore: Firestore,
     private auth: Auth
+
   ) {
     this.adminForm = this.fb.group({
       firstname: ['', Validators.required],
@@ -72,24 +73,53 @@ export class AdminComponent {
     });
   }
 
-  async addAdmin() {
-    if (this.adminForm.valid) {
-      const { firstname, lastname, email, password } = this.adminForm.value;
-      const credential = await createUserWithEmailAndPassword(this.auth, email, password);
-      const userRef = collection(this.firestore, 'users');
+  private currentUserEmail: string | null = null;
+  private currentUserPassword: string | null = null;
 
+async addAdmin() {
+  if (this.adminForm.valid) {
+    const { firstname, lastname, email, password } = this.adminForm.value;
+
+    const currentUser = this.auth.currentUser;
+    if (!currentUser || !currentUser.email) {
+      alert('Nem vagy bejelentkezve!');
+      return;
+    }
+    this.currentUserEmail = currentUser.email;
+
+    try {
+      await createUserWithEmailAndPassword(this.auth, email, password);
+
+      const userRef = collection(this.firestore, 'users');
       await addDoc(userRef, {
         id: Date.now(),
         name: { firstname, lastname },
         email,
-        password,
         role: 'a'
       });
 
-      this.adminForm.reset();
       alert('Új admin sikeresen hozzáadva.');
+
+      const currentPassword = prompt('Add meg az eredeti jelszavad, hogy újra be tudj jelentkezni:');
+      if (currentPassword) {
+        try {
+          await signInWithEmailAndPassword(this.auth, this.currentUserEmail!, currentPassword);
+          alert('Visszajelentkeztél az eredeti felhasználóval.');
+        } catch (error) {
+          alert('Nem sikerült visszajelentkezni: ' + (error as Error).message);
+        }
+      } else {
+        alert('Nem adtad meg a jelszót, így nem tudtál visszajelentkezni.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Hiba történt az admin létrehozásakor.');
     }
+
+    this.adminForm.reset();
   }
+}
+
 
   onImageSelected(event: any) {
     const file = event.target.files[0];

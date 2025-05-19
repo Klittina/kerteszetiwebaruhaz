@@ -1,5 +1,10 @@
 <mat-card class="filter-card">
   <form [formGroup]="filterForm" class="filter-form" (ngSubmit)="loadProducts()">
+   <mat-form-field appearance="fill">
+  <mat-label>Termék neve</mat-label>
+  <input matInput type="text" formControlName="name" placeholder="Keresés név alapján" />
+</mat-form-field>
+
     <mat-form-field appearance="fill">
       <mat-label>Kategória</mat-label>
       <mat-select formControlName="category">
@@ -17,6 +22,15 @@
       <mat-label>Maximum ár (Ft)</mat-label>
       <input matInput type="number" formControlName="maxPrice" />
     </mat-form-field>
+
+    <mat-form-field appearance="fill">
+  <mat-label>Rendezés</mat-label>
+  <mat-select formControlName="sortOrder">
+    <mat-option value="none">Nincs</mat-option>
+    <mat-option value="priceAsc">Ár szerint növekvő</mat-option>
+    <mat-option value="priceDesc">Ár szerint csökkenő</mat-option>
+  </mat-select>
+</mat-form-field>
 
     <button mat-flat-button color="primary" type="submit">Szűrés</button>
   </form>

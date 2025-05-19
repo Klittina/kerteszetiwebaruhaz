@@ -42,4 +42,21 @@
 
 <h2 *ngIf="!loading">Korábbi rendelések</h2>
 <hr />
-<!-- <app-order-history [orders]="orders"></app-order-history> -->
+<div class="sort-field" *ngIf="orders.length > 0">
+  <mat-form-field appearance="fill">
+    <mat-label>Rendezés dátum szerint</mat-label>
+    <mat-select [(value)]="sortOrder" (selectionChange)="changeSortOrder($event.value)">
+      <mat-option value="desc">Legújabb elöl</mat-option>
+      <mat-option value="asc">Legrégebbi elöl</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+<div *ngIf="orders.length > 0; else noOrders">
+  <app-order-history [orders]="orders"></app-order-history>
+</div>
+
+<ng-template #noOrders>
+  <p>Még nincs rendelésed.</p>
+</ng-template>

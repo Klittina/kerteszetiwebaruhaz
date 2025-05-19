@@ -1,5 +1,6 @@
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,13 +10,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+
 import { Product } from '../../../shared/models/Products';
-import { ProductService } from '../../../shared/services/product.service';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PriceFormatPipe } from '../../../shared/pipes/price-format.pipe';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
-    selector: 'app-product-item',
+  selector: 'app-product-item',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,14 +33,28 @@ import { PriceFormatPipe } from '../../../shared/pipes/price-format.pipe';
     PriceFormatPipe
   ],
   templateUrl: './product-item.component.html',
-  styleUrl: './product-item.component.scss'
+  styleUrls: ['./product-item.component.scss']
 })
 export class ProductItemComponent {
   @Input() product!: Product;
+  @Input() isAdmin: boolean = false;
 
   @Output() addToCart = new EventEmitter<Product>();
+  @Output() delete = new EventEmitter<number>();
 
-  onAddToCartClick() {
+  constructor(private authService: AuthService) {}
+
+ngOnInit() {
+  const user = this.authService.getUserData();
+  this.isAdmin = user?.role === 'a';
+  console.log('Szülő komponens isAdmin:', this.isAdmin);
+}
+
+  onAddToCartClick(): void {
     this.addToCart.emit(this.product);
+  }
+
+  onDeleteClick(): void {
+    this.delete.emit(this.product.id);
   }
 }

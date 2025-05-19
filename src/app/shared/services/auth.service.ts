@@ -69,9 +69,9 @@ export class AuthService {
 
       const newUser: User = {
         ...userData,
-        id: Date.now(), // Vagy használj saját ID-generáló logikát
+        id: Date.now(),
         email,
-        password, // nem javasolt így tárolni!
+        password,
         role: 'u'
       };
 

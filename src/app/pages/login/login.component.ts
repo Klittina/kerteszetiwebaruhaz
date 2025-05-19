@@ -9,11 +9,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FakeLoadingService } from '../../shared/services/fake-loading.service';
 import { Subscription } from 'rxjs';
-import { UserService } from '../../shared/services/user.service'; // új import
+import { UserService } from '../../shared/services/user.service';
 import { take } from 'rxjs';
 import { User } from '../../shared/models/User';
 import { signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Auth } from '@angular/fire/auth'; // importálni kell
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +41,7 @@ export class LoginComponent implements OnDestroy{
   loadingSubscription?: Subscription;
 
   constructor(
-  private auth: Auth, // Hozzá kell adni
+  private auth: Auth,
   private router: Router,
   private loadingService: FakeLoadingService,
   private userService: UserService
@@ -55,17 +55,14 @@ async login() {
   this.showLoginForm = false;
 
   try {
-    // ⬇️ Firebase bejelentkezés
     const result = await signInWithEmailAndPassword(this.auth, emailValue, passwordValue);
 
-    // ⬇️ User betöltése és szerepkör lekérdezése Firestore-ból vagy máshonnan
     const user = result.user;
 
     console.log("Sikeres Firebase login:", user.email);
 
-    localStorage.setItem('userEmail', user.email || '');  // <-- EZ KELL
+    localStorage.setItem('userEmail', user.email || '');
 
-    // Most már AppComponent is érzékeli majd!
     this.router.navigateByUrl('/home');
 
   } catch (error) {

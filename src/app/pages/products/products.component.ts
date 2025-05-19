@@ -63,32 +63,68 @@ export class ProductsComponent implements OnInit {
 
   constructor(private productService: ProductService, private fb: FormBuilder) {
     this.filterForm = this.fb.group({
+      name: [''],
       category: [''],
       minPrice: [''],
-      maxPrice: ['']
+      maxPrice: [''],
+      sortOrder: ['none'],
     });
   }
+
+  deleteProduct(productId: number) {
+  this.productService.deleteProduct(productId)
+    .then(() => {
+      this.loadProducts();
+    })
+    .catch(error => {
+      console.error('Hiba a termék törlésekor:', error);
+    });
+}
+
+
 
   ngOnInit(): void {
     this.loadProducts();
 
-    // Opció: figyeld a szűrő változásokat is, ha azonnal frissíteni akarod a listát
     this.filterForm.valueChanges.subscribe(() => {
       this.loadProducts();
     });
   }
 
   loadProducts(): void {
-    const { category, minPrice, maxPrice } = this.filterForm.value;
+  this.productService.getProducts().subscribe(allProducts => {
+    let filtered = allProducts;
 
-    // Átalakítjuk a price értékeket számra, vagy undefined-ra, ha nem töltötték ki
-    const min = minPrice !== '' ? Number(minPrice) : undefined;
-    const max = maxPrice !== '' ? Number(maxPrice) : undefined;
+    const { name, category, minPrice, maxPrice, sortOrder } = this.filterForm.value;
 
-    this.productService.getProductsFiltered(category || undefined, min, max).subscribe(data => {
-      this.products = data;
-    });
-  }
+    if (category) {
+      filtered = filtered.filter(p => p.category === category);
+    }
+
+    if (minPrice !== '' && minPrice !== null) {
+      filtered = filtered.filter(p => p.price >= +minPrice);
+    }
+
+    if (maxPrice !== '' && maxPrice !== null) {
+      filtered = filtered.filter(p => p.price <= +maxPrice);
+    }
+
+    if (name && name.trim() !== '') {
+      const search = name.toLowerCase();
+      filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
+    }
+
+    if (sortOrder === 'priceAsc') {
+      filtered = filtered.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === 'priceDesc') {
+      filtered = filtered.sort((a, b) => b.price - a.price);
+    }
+
+    this.products = filtered;
+  });
+}
+
+
 
   handleAddToCart(product: Product) {
     const userEmail = localStorage.getItem('userEmail');

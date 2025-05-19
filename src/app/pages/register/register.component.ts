@@ -40,7 +40,7 @@ export class RegisterComponent {
   isLoading = false;
   showForm = true;
   registerError = '';
-  signupError = ''; // <<< EZ HIÁNYZOTT
+  signupError = '';
 
 
   constructor(
@@ -70,7 +70,7 @@ export class RegisterComponent {
     firstname: this.registerForm.value.name?.firstname || '',
     lastname: this.registerForm.value.name?.lastname || ''
   },
-  role: 'u' // Alapértelmezett felhasználó (nem admin)
+  role: 'u'
 };
 
 

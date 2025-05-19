@@ -22,5 +22,10 @@
     >
       Kosárba
     </button>
+<button *ngIf="isAdmin" mat-icon-button color="warn" (click)="onDeleteClick()">
+  <mat-icon>delete</mat-icon>
+</button>
+
+
   </mat-card-content>
 </mat-card>

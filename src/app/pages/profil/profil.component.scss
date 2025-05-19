@@ -94,3 +94,29 @@ hr{
 .mat-form-field input {
   font-size: 1rem;
 }
+.sort-field {
+  width: 70%;
+  margin: 20px auto;
+  display: block;
+}
+
+.sort-field mat-form-field {
+  width: 100%;
+  background-color: #f1f8e9;
+  border-radius: 8px;
+}
+
+.sort-field .mat-form-field-flex {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.sort-field .mat-select-value {
+  font-weight: 500;
+  color: #388e3c;
+}
+
+.sort-field .mat-label {
+  color: #2e7d32;
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, deleteDoc, updateDoc, getDoc } from '@angular/fire/firestore';
 import { Product } from '../models/Products';
 import { Observable } from 'rxjs';
 import { CollectionReference, DocumentData, query, where, orderBy, limit } from '@firebase/firestore';
@@ -38,4 +38,25 @@ export class ProductService {
 
     return collectionData(q, { idField: 'id' }) as Observable<Product[]>;
   }
+
+  deleteProduct(productId: number): Promise<void> {
+  const docRef = doc(this.firestore, 'products', productId.toString());
+  return deleteDoc(docRef);
+}
+
+
+  async decreaseStock(productId: string, quantity: number) {
+  const productRef = doc(this.firestore, 'products', productId);
+  const productSnap = await getDoc(productRef);
+
+  if (productSnap.exists()) {
+    const productData = productSnap.data() as Product;
+    const newStock = (productData.stock || 0) - quantity;
+    if (newStock < 0) throw new Error(`Nincs elég készlet a termékből: ${productData.name}`);
+
+    await updateDoc(productRef, { stock: newStock });
+  } else {
+    throw new Error('Termék nem található');
+  }
+}
 }

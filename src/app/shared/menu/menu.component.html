@@ -15,16 +15,17 @@
   }
   @if (isLoggedIn) {
     <a mat-list-item routerLink="/cart" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>person</mat-icon>
+      <mat-icon matListItemIcon>shopping_basket</mat-icon>
       <span matListItemTitle>Kosár</span>
     </a>
   }
-  @if (isLoggedIn) {
-    <a mat-list-item routerLink="/admin" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>person</mat-icon>
-      <span matListItemTitle>Admin</span>
-    </a>
-  }
+  @if (isLoggedIn && userRole === 'a') {
+  <a mat-list-item routerLink="/admin" routerLinkActive="active-list-item" (click)="closeMenu()">
+    <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+    <span matListItemTitle>Admin</span>
+  </a>
+}
+
   @if (!isLoggedIn) {
     <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
       <mat-icon matListItemIcon>login</mat-icon>

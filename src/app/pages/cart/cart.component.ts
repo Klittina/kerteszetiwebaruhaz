@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { OrdersService } from '../../shared/services/orders.service';
 import { Order } from '../../shared/models/Orderss';
+import { ProductService } from '../../shared/services/product.service';
 
 @Component({
   selector: 'app-cart',
@@ -25,7 +26,10 @@ import { Order } from '../../shared/models/Orderss';
 export class CartComponent implements OnInit {
   cartItems: (Product & { quantity: number })[] = [];
 
-  constructor(private ordersService: OrdersService) {}
+  constructor(
+  private ordersService: OrdersService,
+  private productService: ProductService
+) {}
 
 async placeOrder() {
   const userEmail = localStorage.getItem('userEmail');
@@ -35,12 +39,11 @@ async placeOrder() {
   }
 
   const orderItems = this.cartItems.map(item => ({
-  productId: item.id.toString(), // <-- erre van szükség
-  productName: item.name,
-  quantity: item.quantity,
-  unitPrice: item.price
-}));
-
+    productId: item.id.toString(),
+    productName: item.name,
+    quantity: item.quantity,
+    unitPrice: item.price
+  }));
 
   const newOrder: Order = {
     userEmail: userEmail,
@@ -49,14 +52,29 @@ async placeOrder() {
     items: orderItems
   };
 
-  await this.ordersService.saveOrder(newOrder);
-  this.clearCart();
-  alert('Rendelés sikeresen leadva!');
+  try {
+    await this.ordersService.saveOrder(newOrder);
+
+    for (const item of this.cartItems) {
+      await this.productService.decreaseStock(item.id.toString(), item.quantity);
+    }
+
+    this.clearCart();
+    alert('Rendelés sikeresen leadva!');
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      alert('Hiba a rendelés leadásakor: ' + error.message);
+    } else {
+      alert('Hiba a rendelés leadásakor');
+    }
+  }
 }
+
 
   ngOnInit() {
     this.loadCart();
   }
+
 
   addToCart(product: Product) {
   const userEmail = localStorage.getItem('userEmail');

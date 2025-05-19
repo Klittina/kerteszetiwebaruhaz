@@ -13,6 +13,8 @@ import { Auth, user } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { User as FirebaseUser } from 'firebase/auth';
 import { User } from '../../shared/models/User';
+import { OrderHistoryComponent } from './order-history/order-history.component';
+import { Order } from '../../shared/models/Orderss';
 
 
 @Component({
@@ -28,7 +30,8 @@ import { User } from '../../shared/models/User';
     MatCardModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    OrderHistoryComponent
   ],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
@@ -37,6 +40,9 @@ export class ProfilComponent implements OnInit {
   private auth = inject(Auth);
   private firestore = inject(Firestore);
   private fb = inject(FormBuilder);
+
+
+orders: Order[] = [];
 
   firebaseUser: FirebaseUser | null = null;
   profileForm!: FormGroup;
@@ -88,6 +94,7 @@ private async loadUserData() {
   }
 
   this.loading = false;
+  await this.loadOrdersForUser(this.firebaseUser.email);
 }
 
   async saveChanges() {
@@ -102,8 +109,44 @@ private async loadUserData() {
 
     this.editMode = false;
     this.loading = true;
-    await this.loadUserData(); // újratöltés a mentés után
+    await this.loadUserData();
   }
+}
+
+private async loadOrdersForUser(email: string) {
+  const ordersRef = collection(this.firestore, 'orders');
+  const q = query(ordersRef, where('userEmail', '==', email));
+  const querySnapshot = await getDocs(q);
+
+  const orders = querySnapshot.docs.map(doc => {
+    const data = doc.data();
+
+    return {
+      id: doc.id,
+      userEmail: data['userEmail'],
+      total: data['total'],
+      items: data['items'],
+      createdAt: data['createdAt'].toDate()
+    } as Order;
+  });
+
+  this.orders = orders;
+  this.sortOrders();
+}
+
+sortOrder: 'desc' | 'asc' = 'desc';
+
+changeSortOrder(order: 'asc' | 'desc') {
+  this.sortOrder = order;
+  this.sortOrders();
+}
+
+private sortOrders() {
+  this.orders = [...this.orders].sort((a, b) => {
+    return this.sortOrder === 'desc'
+      ? b.createdAt.getTime() - a.createdAt.getTime()
+      : a.createdAt.getTime() - b.createdAt.getTime();
+  });
 }
 
 }

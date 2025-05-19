@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +7,12 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 
+import { Auth, onAuthStateChanged, User as FirebaseUser } from '@angular/fire/auth';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+
 @Component({
   selector: 'app-menu',
+  standalone: true,
   imports: [
     RouterLink,
     RouterLinkActive,
@@ -29,25 +25,32 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
-export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MenuComponent implements OnInit, OnDestroy {
   @Input() sidenav!: MatSidenav;
   @Input() isLoggedIn: boolean = false;
   @Output() logoutEvent = new EventEmitter<void>();
 
-  constructor() {
-    console.log('constructor called');
-  }
+  userRole: string | null = null;
+
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore
+  ) {}
 
   ngOnInit(): void {
-    console.log('ngOnInit called');
-  }
+    onAuthStateChanged(this.auth, async (user: FirebaseUser | null) => {
+      if (user?.email) {
+        const usersRef = collection(this.firestore, 'users');
+        const q = query(usersRef, where('email', '==', user.email));
+        const querySnapshot = await getDocs(q);
 
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit called');
-  }
-
-  ngOnDestroy(): void {
-    // későbbi Subscription-höz hely előkészítve
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const data = userDoc.data();
+          this.userRole = data['role'] || null;
+        }
+      }
+    });
   }
 
   closeMenu(): void {
@@ -58,8 +61,12 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   logout(): void {
     localStorage.setItem('isLoggedIn', 'false');
-    this.logoutEvent.emit(); // fontos az esemény emitálása
+    this.logoutEvent.emit();
     this.closeMenu();
     window.location.href = '/home';
+  }
+
+  ngOnDestroy(): void {
+    // ha lenne subscription, itt törölnénk
   }
 }
